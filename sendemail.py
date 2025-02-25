@@ -38,7 +38,7 @@ def send_email():
     msg.attach(MIMEText(html_content, "html"))
 
     # Add Attachments (Modify with your file paths)
-    file_paths = ["GATE _CS_2025_Syllabus.pdf"]  # Relative paths to attachments
+    file_paths = ["sample.pdf"]  # Relative paths to attachments
 
     for file_path in file_paths:
         if os.path.exists(file_path):  # Ensure file exists
