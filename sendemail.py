@@ -1,29 +1,35 @@
 import smtplib
-import getpass
 import os
+import getpass
+from dotenv import load_dotenv
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 
+load_dotenv()
+
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL")
+
+if not SENDER_EMAIL or not RECIPIENT_EMAIL:
+    print("Error: Missing email credentials. Please set them in the .env file.")
+    exit()
+
 def send_email():
-    sender_email = "gedelajhansi22@ifheindia.org"
-    password = getpass.getpass("Enter App Password: ")  # Use an App Password instead of your real password
-    recipient_email = "jhansi6edc99@gmail.com"
-    
-    # Create Email
+    password = getpass.getpass("Enter App Password: ")  # Entering App Password
+
     msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = recipient_email
+    msg['From'] = SENDER_EMAIL
+    msg['To'] = RECIPIENT_EMAIL
     msg['Subject'] = "Welcome to AI Mafia 🚀"
 
     # HTML Content
-    html_content = r"""\
+    html_content = """\
     <html>
       <body>
         <h2 style="color:blue;">Hello Everyone! 🎉</h2>
         <p>We are pleased to inform you that you have been <b>selected</b> exceptionally for your amazing abilities.</p>
         <p>Check out our website: <a href='https://example.com'>Visit Here</a></p>
-        <img src="C:\Users\jhans\Downloads\Discover Easy Watercolor Art ideas.jpeg" width="300" height="200">
         <p>Thank You! 😊</p>
       </body>
     </html>
@@ -32,7 +38,7 @@ def send_email():
     msg.attach(MIMEText(html_content, "html"))
 
     # Add Attachments (Modify with your file paths)
-    file_paths = [r"C:\Users\jhans\OneDrive\Desktop\GATE _CS_2025_Syllabus.pdf"]  # List of files to attach
+    file_paths = ["GATE _CS_2025_Syllabus.pdf"]  # Relative paths to attachments
 
     for file_path in file_paths:
         if os.path.exists(file_path):  # Ensure file exists
@@ -46,8 +52,8 @@ def send_email():
     # SMTP Server Setup
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()  
-    server.login(sender_email, password)
-    server.sendmail(sender_email, recipient_email, msg.as_string())
+    server.login(SENDER_EMAIL, password)
+    server.sendmail(SENDER_EMAIL, RECIPIENT_EMAIL, msg.as_string())
     server.quit()
 
     print("✅ HTML Email with Attachments Sent Successfully!")
